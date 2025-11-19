@@ -7,12 +7,13 @@ public class Deck {
     public Deck(String[] ranks, String[] suits, int[] values){
         cards = new ArrayList<Card>();
         Card card;
-        for (int i = 0; i < ranks.length; i++){
+        for (int i = 0; i < ranks.length; i++) {
             card = new Card(suits[i], ranks[i], values[i]);
             cards.add(card);
         }
 
         cardsLeft = cards.size();
+        shuffle();
     }
 
     public boolean isEmpty(){
