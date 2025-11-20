@@ -7,9 +7,24 @@ public class Deck {
     public Deck(String[] ranks, String[] suits, int[] values){
         cards = new ArrayList<Card>();
         Card card;
-        for (int i = 0; i < ranks.length; i++) {
-            card = new Card(suits[i], ranks[i], values[i]);
-            cards.add(card);
+        int points;
+        for (int i = 0; i < suits.length; i++) {
+            if (suits[i].equals("Hearts"))
+            {
+                points = 1;
+            }
+            else
+            {
+                points = 0;
+            }
+            for (int j = 0; j < ranks.length; j++) {
+                // Queen of Spades card is worth 13 points
+                if (suits[i].equals("Spades") && ranks[j].equals("Queen")){
+                    points = 13;
+                }
+                card = new Card(suits[i], ranks[j], points);
+                cards.add(card);
+            }
         }
 
         cardsLeft = cards.size();
@@ -41,7 +56,7 @@ public class Deck {
     public void shuffle(){
         int r;
         Card holder;
-        for (int i = cardsLeft; i > 0; i--){
+        for (int i = (cardsLeft - 1); i > 0; i--){
             r = (int)(Math.random() * (i + 1));
             holder = cards.get(i);
             cards.set(i, cards.get(r));
