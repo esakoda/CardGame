@@ -49,7 +49,19 @@ public class Game {
     }
 
     public void printInstructions(){
-        System.out.println("Welcome to the game of Hearts!");
+        System.out.println("Welcome to the game of Hearts! The game is played over 13 tricks. The first trick must start " +
+                "with the 2 of clubs, and the other players must play a club if they have one; if they don’t, they may " +
+                "play any card. The player who plays the highest card of the suit that was led wins the trick.\n" +
+                "\n" +
+                "For every new trick, the player who won the previous one leads. They may play any suit except hearts, " +
+                "unless hearts have been “broken” (which happens when a player has no cards of the led suit and chooses " +
+                "to play a heart). All following players must play the same suit if possible; if not, they may play any " +
+                "card.\n" +
+                "\n" +
+                "Your goal is to finish with the fewest points. Each heart is worth 1 point, and the Queen of Spades is " +
+                "worth 13 points. However, if you choose to attempt “shooting the moon,” you must take all 13 hearts " +
+                "plus the Queen of Spades. If you succeed, you win; if not, the player with the lowest score after all " +
+                "13 tricks wins the game.");
     }
 
     public void playGame(){
