@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Player {
     private String name;
@@ -38,5 +39,12 @@ public class Player {
 
     public String toString(){
         return this.name + " has " + this.points + " points\n" + this.name + "'s cards: " + this.hand;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Player player = (Player) o;
+        return points == player.points && Objects.equals(name, player.name) && Objects.equals(hand, player.hand);
     }
 }

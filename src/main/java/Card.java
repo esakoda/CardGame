@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Card {
     private String suit;
     private String rank;
@@ -35,5 +37,12 @@ public class Card {
 
     public String toString(){
         return this.rank + " of " + this.suit;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return value == card.value && Objects.equals(suit, card.suit) && Objects.equals(rank, card.rank);
     }
 }
