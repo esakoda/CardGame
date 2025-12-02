@@ -5,15 +5,17 @@ public class Player {
     private String name;
     private ArrayList<Card> hand;
     private int points;
+    private int num;
 
     public Player(String name){
         this.name = name;
         this.points = 0;
     }
 
-    public Player(String name, ArrayList<Card> hand){
+    public Player(String name, ArrayList<Card> hand, int num){
         this.name = name;
         this.hand = hand;
+        this.num = num;
         this.points = 0;
     }
 
@@ -35,6 +37,19 @@ public class Player {
 
     public void addCard(Card card){
         hand.add(card);
+    }
+
+    // Remove a card from the players hand
+    public void removeCard(Card card){
+        for (int i = 0 ; i < this.hand.size(); i++){
+            if (this.hand.get(i).equals(card)){
+                this.hand.remove(i);
+            }
+        }
+    }
+
+    public int getNum() {
+        return num;
     }
 
     public String toString(){

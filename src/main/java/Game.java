@@ -11,6 +11,9 @@ public class Game {
     private ArrayList<Card> hand3;
     private ArrayList<Card> hand4;
     private Deck deck;
+    private Card twoOfClubs;
+    private ArrayList<Card> trick;
+    private Player taker;
 
     public Game(){
         // Get the name of each player
@@ -42,10 +45,16 @@ public class Game {
         }
 
         // Create 4 Players
-        player1 = new Player(names[0], hand1);
-        player2 = new Player(names[1], hand2);
-        player3 = new Player(names[2], hand3);
-        player4 = new Player(names[3], hand4);
+        player1 = new Player(names[0], hand1, 1);
+        player2 = new Player(names[1], hand2, 2);
+        player3 = new Player(names[2], hand3, 3);
+        player4 = new Player(names[3], hand4, 4);
+
+        // Initialize 2 of Clubs
+        twoOfClubs = new Card("Clubs", "2", 0);
+
+        // Create trick pile
+        trick = new ArrayList<>();
     }
 
     public void printInstructions(){
@@ -72,65 +81,55 @@ public class Game {
     }
 
     // Find the player who starts the game
-    public Player findPlayerWithTwoOfClubs(){
-        Card twoOfClubs = new Card("Clubs", "2", 0);
+    public Player playerWithTwoOfClubs(){
         for (int i = 0; i < 13;i++){
-            if (hand1.get(i).equals(twoOfClubs)){
+            if (player1.getHand().get(i).equals(twoOfClubs)){
                 return player1;
             }
-            if (hand2.get(i).equals(twoOfClubs)){
+            if (player2.getHand().get(i).equals(twoOfClubs)){
                 return player2;
             }
-            if (hand3.get(i).equals(twoOfClubs)){
+            if (player3.getHand().get(i).equals(twoOfClubs)){
                 return player3;
             }
-            if (hand4.get(i).equals(twoOfClubs)){
+            if (player4.getHand().get(i).equals(twoOfClubs)){
                 return player4;
             }
         }
         return null;
     }
 
-    // Returns the player associated with a number
-    public Player getPlayer(int num){
-        if (num == 1){
-            return player1;
-        }
-        else if (num == 2){
+    public Player nextPlayer(Player player){
+        if (player.equals(player1)){
             return player2;
         }
-        else if (num == 3){
+        if (player.equals(player2)){
             return player3;
         }
-        else if (num == 4){
+        if (player.equals(player3)){
             return player4;
         }
-        else{
-            return null;
+        if (player.equals(player4)){
+            return player1;
         }
+        return null;
     }
 
-    public int getNumOfPlayer(Player player){
-        if (player.equals(player1)){
-            return 1;
-        }
-        else if (player.equals(player2)){
-            return 2;
-        }
-        else if (player.equals(player3)){
-            return 3;
-        }
-        else if (player.equals(player4)){
-            return 4;
-        }
-        else{
-            return -1;
-        }
+    public void playRound(){
+
     }
 
     public void playGame(){
-        System.out.println("Player " + getNumOfPlayer(findPlayerWithTwoOfClubs()) + " starts with the 2 of clubs.");
-        // Notes: make function that returns hand of player
+        // The player with the 2 of clubs starts the game
+        System.out.println(playerWithTwoOfClubs().getName() + " starts with the 2 of clubs.");
+        playerWithTwoOfClubs().removeCard(twoOfClubs);
+        trick.add(twoOfClubs);
+        taker = playerWithTwoOfClubs();
+        // Next player sees hand and then plays
+        System.out.println(nextPlayer(playerWithTwoOfClubs()).toString());
+        System.out.println("Pick your card (reminder: you have to play the same suit if you can!): ");
+        // Questions: How should the user input their card so I can easily read it in
+        // Is it ok if I don't check if they put in the correct suit and just assume
     }
 
     public static void main(String[] args) {
