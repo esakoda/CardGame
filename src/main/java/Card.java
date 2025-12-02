@@ -11,6 +11,11 @@ public class Card {
         this.value= value;
     }
 
+    public Card(String suit, String rank){
+        this.suit = suit;
+        this.rank = rank;
+    }
+
     public String getSuit() {
         return suit;
     }
@@ -43,6 +48,6 @@ public class Card {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
-        return value == card.value && Objects.equals(suit, card.suit) && Objects.equals(rank, card.rank);
+        return Objects.equals(suit, card.suit) && Objects.equals(rank, card.rank);
     }
 }

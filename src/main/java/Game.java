@@ -14,6 +14,9 @@ public class Game {
     private Card twoOfClubs;
     private ArrayList<Card> trick;
     private Player taker;
+    private Player current;
+    private Card choice;
+    private Card cardFromHand;
 
     public Game(){
         // Get the name of each player
@@ -125,11 +128,26 @@ public class Game {
         playerWithTwoOfClubs().removeCard(twoOfClubs);
         trick.add(twoOfClubs);
         taker = playerWithTwoOfClubs();
+        current = nextPlayer(playerWithTwoOfClubs());
         // Next player sees hand and then plays
-        System.out.println(nextPlayer(playerWithTwoOfClubs()).toString());
+        System.out.println(current.toString());
         System.out.println("Pick your card (reminder: you have to play the same suit if you can!): ");
-        // Questions: How should the user input their card so I can easily read it in
-        // Is it ok if I don't check if they put in the correct suit and just assume
+        Scanner scanner = new Scanner(System.in);
+        String userInput = scanner.nextLine();
+        int spaceIndex = userInput.indexOf(" ");
+        // Take user input and get the rank
+        String rank = userInput.substring(0,spaceIndex);
+        // Take user input and get the suit
+        String suit = userInput.substring(spaceIndex);
+        // Take the card they inputted and remove it from their hand and add to trick pile
+        choice = new Card(suit, rank);
+        int index = current.getHand().indexOf(choice);
+        if (index != -1){
+            Card cardFomHand = current.getHand().remove(index);
+            // Notes: check if it's the same suit as previous suit played and if rank is higher
+            // If it is make this player the taker
+            trick.add(cardFomHand);
+        }
     }
 
     public static void main(String[] args) {
