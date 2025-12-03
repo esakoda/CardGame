@@ -11,6 +11,7 @@ public class Card {
         this.value= value;
     }
 
+    // Added constructor without value because the user won't input the value of their card
     public Card(String suit, String rank){
         this.suit = suit;
         this.rank = rank;

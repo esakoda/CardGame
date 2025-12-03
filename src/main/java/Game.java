@@ -93,23 +93,34 @@ public class Game {
 
     // Find the player who starts the game
     public Player playerWithTwoOfClubs(){
-        for (int i = 0; i < 13;i++){
-            if (player1.getHand().get(i).equals(twoOfClubs)){
+        for (int i = 0; i < player1.getHand().size();i++){
+            if (player1.getHand().get(i).getRank().equals("2") &&
+                    player1.getHand().get(i).getSuit().equals("Clubs")){
                 return player1;
             }
-            if (player2.getHand().get(i).equals(twoOfClubs)){
+        }
+        for (int i = 0; i < player2.getHand().size();i++) {
+            if (player2.getHand().get(i).getRank().equals("2") &&
+                    player2.getHand().get(i).getSuit().equals("Clubs")) {
                 return player2;
             }
-            if (player3.getHand().get(i).equals(twoOfClubs)){
+        }
+        for (int i = 0; i < player3.getHand().size();i++) {
+            if (player3.getHand().get(i).getRank().equals("2") &&
+                    player3.getHand().get(i).getSuit().equals("Clubs")) {
                 return player3;
             }
-            if (player4.getHand().get(i).equals(twoOfClubs)){
+        }
+        for (int i = 0; i < player4.getHand().size();i++) {
+            if (player4.getHand().get(i).getRank().equals("2") &&
+                    player4.getHand().get(i).getSuit().equals("Clubs")){
                 return player4;
             }
         }
         return null;
     }
 
+    // Get the next Player based on previous
     public Player nextPlayer(Player player){
         if (player.equals(player1)){
             return player2;
@@ -201,7 +212,6 @@ public class Game {
                         }
                         // If they only have hearts, then they can play hearts
                     }
-                    //
                     ledSuit = cardFromHand.getSuit();
                     validPlay = true;
                 }
@@ -286,11 +296,153 @@ public class Game {
 
     public void playGame(){
         // The player with the 2 of clubs starts the game
-        System.out.println(playerWithTwoOfClubs().getName() + " starts with the 2 of clubs.");
-        playerWithTwoOfClubs().removeCard(twoOfClubs);
+        Player starter = playerWithTwoOfClubs();
+        System.out.println("\n" + starter.getName() + " starts with the 2 of clubs.");
+        starter.removeCard(twoOfClubs);
         trick.add(twoOfClubs);
-        taker = playerWithTwoOfClubs();
-        current = nextPlayer(playerWithTwoOfClubs());
+        taker = starter;
+        takerCard = twoOfClubs;
+        ledSuit = "Clubs";
+        current = nextPlayer(starter);
+
+        // Other 3 players play their first card
+        for (int i = 0; i < 3; i++){
+            System.out.println("\n" + current.getName() + "'s turn:");
+            System.out.println(current.toString());
+
+            Scanner scanner = new Scanner(System.in);
+            boolean validPlay = false;
+
+            // If the player inputs an invalid card
+            while(!validPlay) {
+                System.out.println("Pick your card (format: rank suit):");
+                String userInput = scanner.nextLine().trim();
+                int spaceIndex = userInput.indexOf(" ");
+
+                // If the user formats their input wrong
+                if (spaceIndex == -1) {
+                    System.out.println("Invalid format! (format: rank suit)");
+                    // Prevents error of Java trying to split a string with no space
+                    continue;
+                }
+
+                // Take user input and get the rank
+                String rank = userInput.substring(0, spaceIndex);
+                // Take user input and get the suit
+                String suit = userInput.substring(spaceIndex + 1);
+
+                // Create the card they want to play
+                choice = new Card(suit, rank);
+                int index = current.getHand().indexOf(choice);
+
+                // If the user doesn't have the card they wanted to place
+                if (index == -1) {
+                    System.out.println("You don't have that card!");
+                    // Take them back to the beginning of the loop so they input another card
+                    continue;
+                }
+
+                // Get the actual card from their hand (has points)
+                cardFromHand = current.getHand().get(index);
+
+                // Check if they are following Clubs
+                if (cardFromHand.getSuit().equals("Clubs")) {
+                    validPlay = true;
+                } else {
+                    // Check if they have any clubs
+                    boolean hasClubs = false;
+                    for (int j = 0; j < current.getHand().size(); j++) {
+                        if (current.getHand().get(j).getSuit().equals("Clubs")) {
+                            hasClubs = true;
+                            break;
+                        }
+                    }
+                    if (hasClubs) {
+                        System.out.println("You must play clubs if you have one!");
+                        continue;
+                    } else {
+                        // If they don't have clubs they can play anything
+                        // Check if they break hearts
+                        if (cardFromHand.getSuit().equals("Hearts")) {
+                            heartsBroken = true;
+                        }
+                        validPlay = true;
+                    }
+                }
+                if (validPlay) {
+                    current.getHand().remove(index);
+                    trick.add(cardFromHand);
+                    System.out.println(current.getName() + " plays " + cardFromHand);
+
+                    // Check if it's the same suit and higher rank, if so this player becomes the taker
+                    if (cardFromHand.getSuit().equals("Clubs")) {
+                        if (getRankValue(cardFromHand.getRank()) > getRankValue(takerCard.getRank())) {
+                            taker = current;
+                            takerCard = cardFromHand;
+                        }
+                    }
+                }
+            }
+            current = nextPlayer(current);
+        }
+        // First trick is over
+        System.out.println("\n" + taker.getName() + " wins the first trick!");
+        // Calculate how many points the taker of the trick takes
+        int trickPoints = 0;
+        for(int i = 0; i < trick.size(); i++){
+            trickPoints += trick.get(i).getValue();
+        }
+        if (trickPoints > 0){
+            System.out.println(taker.getName() + " takes " + trickPoints + " points.");
+            taker.addPoints(trickPoints);
+        }
+
+        // Clear trick
+        while (trick.size() > 0){
+            trick.remove(0);
+        }
+
+        // PLay remaining 12 tricks
+        for(int round = 2; round <= 13; round++){
+            System.out.println("\n---------- Trick " + round + " ----------");
+            playRound();
+        }
+
+        // Game over - count up points and determine the winner
+        System.out.println("\n---------- GAME OVER ----------");
+        System.out.println("\nFinal Scores:");
+        System.out.println(player1.getName() + ": " + player1.getPoints() + " points");
+        System.out.println(player2.getName() + ": " + player2.getPoints() + " points");
+        System.out.println(player3.getName() + ": " + player3.getPoints() + " points");
+        System.out.println(player4.getName() + ": " + player4.getPoints() + " points");
+
+        // Check if someone shot the moon
+        if(player1.getPoints() == 26){
+            System.out.println("\n" + player1.getName() + " shot the moon and wins!!");
+        }
+        else if(player2.getPoints() == 26){
+            System.out.println("\n" + player2.getName() + " shot the moon and wins!!");
+        }
+        else if(player3.getPoints() == 26){
+            System.out.println("\n" + player3.getName() + " shot the moon and wins!!");
+        }
+        else if(player4.getPoints() == 26){
+            System.out.println("\n" + player4.getName() + " shot the moon and wins!!");
+        }
+        else {
+            // If no one shot the moon - calculate lowest score for winner
+            Player winner = player1;
+            if (player2.getPoints() < winner.getPoints()){
+                winner = player2;
+            }
+            if (player3.getPoints() < winner.getPoints()){
+                winner = player3;
+            }
+            if (player4.getPoints() < winner.getPoints()){
+                winner = player4;
+            }
+            System.out.println("\n" + winner.getName() + " wins with the lowest score!");
+        }
     }
 
     public static void main(String[] args) {
