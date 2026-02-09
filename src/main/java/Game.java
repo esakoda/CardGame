@@ -2,14 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-    private Player player1;
-    private Player player2;
-    private Player player3;
-    private Player player4;
-    private ArrayList<Card> hand1;
-    private ArrayList<Card> hand2;
-    private ArrayList<Card> hand3;
-    private ArrayList<Card> hand4;
+    private Player[] players;
+    private ArrayList<Card>[] hands;
     private Deck deck;
     private Card twoOfClubs;
     private ArrayList<Card> trick;
@@ -21,6 +15,7 @@ public class Game {
     private String ledSuit;
     private String[] ranks;
     private Card takerCard;
+    private static final int NUM_PLAYERS = 4;
 
     public Game(){
         // Get the name of each player
@@ -38,25 +33,22 @@ public class Game {
         deck = new Deck(ranks, suits, values);
 
         // Deal the deck out to each player
-        hand1 = new ArrayList<Card>();
-        hand2 = new ArrayList<Card>();
-        hand3 = new ArrayList<Card>();
-        hand4 = new ArrayList<Card>();
+        for (int i = 0; i < NUM_PLAYERS; i++){
+            hands[i] = new ArrayList<Card>();
+        }
 
         int cardsPerPlayer = (deck.getCardsLeft() / 4);
         for (int i = 0; i < cardsPerPlayer; i++)
         {
-            hand1.add(deck.deal());
-            hand2.add(deck.deal());
-            hand3.add(deck.deal());
-            hand4.add(deck.deal());
+            for (int j = 0; j < NUM_PLAYERS; j++){
+                hands[j].add(deck.deal());
+            }
         }
 
         // Create 4 Players
-        player1 = new Player(names[0], hand1, 1);
-        player2 = new Player(names[1], hand2, 2);
-        player3 = new Player(names[2], hand3, 3);
-        player4 = new Player(names[3], hand4, 4);
+        for (int i = 0; i < NUM_PLAYERS; i++){
+            players[i] = new Player(names[i], hands[i], (i + 1));
+        }
 
         // Initialize 2 of Clubs
         twoOfClubs = new Card("Clubs", "2", 0);
@@ -93,28 +85,9 @@ public class Game {
 
     // Find the player who starts the game
     public Player playerWithTwoOfClubs(){
-        for (int i = 0; i < player1.getHand().size();i++){
-            if (player1.getHand().get(i).getRank().equals("2") &&
-                    player1.getHand().get(i).getSuit().equals("Clubs")){
-                return player1;
-            }
-        }
-        for (int i = 0; i < player2.getHand().size();i++) {
-            if (player2.getHand().get(i).getRank().equals("2") &&
-                    player2.getHand().get(i).getSuit().equals("Clubs")) {
-                return player2;
-            }
-        }
-        for (int i = 0; i < player3.getHand().size();i++) {
-            if (player3.getHand().get(i).getRank().equals("2") &&
-                    player3.getHand().get(i).getSuit().equals("Clubs")) {
-                return player3;
-            }
-        }
-        for (int i = 0; i < player4.getHand().size();i++) {
-            if (player4.getHand().get(i).getRank().equals("2") &&
-                    player4.getHand().get(i).getSuit().equals("Clubs")){
-                return player4;
+        for (int i = 0; i < NUM_PLAYERS; i++){
+            for (int j = 0; j < players[i].getHand().size(); j++){
+                if (players[i].getHand().get(j).equals(twoOfClubs);
             }
         }
         return null;
