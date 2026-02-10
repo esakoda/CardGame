@@ -3,9 +3,7 @@ import java.util.Scanner;
 
 public class Game {
     private Player[] players;
-    private ArrayList<Card>[] hands;
     private Deck deck;
-    private Card twoOfClubs;
     private ArrayList<Card> trick;
     private Player taker;
     private Player current;
@@ -16,6 +14,8 @@ public class Game {
     private String[] ranks;
     private Card takerCard;
     private static final int NUM_PLAYERS = 4;
+    private static final int POINTS_MOON = 26;
+    private static final Card twoOfClubs = new Card("Clubs", "2", 0);
 
     public Game(){
         // Get the name of each player
@@ -32,26 +32,25 @@ public class Game {
         int[] values = {0, 1, 13};
         deck = new Deck(ranks, suits, values);
 
+        players = new Player[NUM_PLAYERS];
+
+        // Create 4 Players
+        for (int i = 0; i < NUM_PLAYERS; i++){
+            players[i] = new Player(names[i], i);
+        }
+
         // Deal the deck out to each player
         for (int i = 0; i < NUM_PLAYERS; i++){
-            hands[i] = new ArrayList<Card>();
+            players[i].setHand(new ArrayList<Card>());
         }
 
         int cardsPerPlayer = (deck.getCardsLeft() / 4);
         for (int i = 0; i < cardsPerPlayer; i++)
         {
             for (int j = 0; j < NUM_PLAYERS; j++){
-                hands[j].add(deck.deal());
+                players[j].getHand().add(deck.deal());
             }
         }
-
-        // Create 4 Players
-        for (int i = 0; i < NUM_PLAYERS; i++){
-            players[i] = new Player(names[i], hands[i], (i + 1));
-        }
-
-        // Initialize 2 of Clubs
-        twoOfClubs = new Card("Clubs", "2", 0);
 
         // Create trick pile
         trick = new ArrayList<>();
@@ -87,7 +86,9 @@ public class Game {
     public Player playerWithTwoOfClubs(){
         for (int i = 0; i < NUM_PLAYERS; i++){
             for (int j = 0; j < players[i].getHand().size(); j++){
-                if (players[i].getHand().get(j).equals(twoOfClubs);
+                if (players[i].getHand().get(j).equals(twoOfClubs)){
+                    return players[i];
+                };
             }
         }
         return null;
@@ -95,19 +96,12 @@ public class Game {
 
     // Get the next Player based on previous
     public Player nextPlayer(Player player){
-        if (player.equals(player1)){
-            return player2;
+        if (player.getNum() == 3){
+            return players[0];
         }
-        if (player.equals(player2)){
-            return player3;
+        else{
+            return players[(player.getNum() + 1)];
         }
-        if (player.equals(player3)){
-            return player4;
-        }
-        if (player.equals(player4)){
-            return player1;
-        }
-        return null;
     }
 
     // Get the value of each rank, so I can compare them (2 is the lowest, ace is the highest)
@@ -384,35 +378,26 @@ public class Game {
         // Game over - count up points and determine the winner
         System.out.println("\n---------- GAME OVER ----------");
         System.out.println("\nFinal Scores:");
-        System.out.println(player1.getName() + ": " + player1.getPoints() + " points");
-        System.out.println(player2.getName() + ": " + player2.getPoints() + " points");
-        System.out.println(player3.getName() + ": " + player3.getPoints() + " points");
-        System.out.println(player4.getName() + ": " + player4.getPoints() + " points");
+        for (int i = 0; i < NUM_PLAYERS; i++){
+            System.out.println(players[i].getName() + ": " + players[i].getPoints() + " points");
+        }
 
         // Check if someone shot the moon
-        if(player1.getPoints() == 26){
-            System.out.println("\n" + player1.getName() + " shot the moon and wins!!");
-        }
-        else if(player2.getPoints() == 26){
-            System.out.println("\n" + player2.getName() + " shot the moon and wins!!");
-        }
-        else if(player3.getPoints() == 26){
-            System.out.println("\n" + player3.getName() + " shot the moon and wins!!");
-        }
-        else if(player4.getPoints() == 26){
-            System.out.println("\n" + player4.getName() + " shot the moon and wins!!");
-        }
-        else {
-            // If no one shot the moon - calculate lowest score for winner
-            Player winner = player1;
-            if (player2.getPoints() < winner.getPoints()){
-                winner = player2;
+        boolean moonShot = false;
+        for (int i = 0; i < NUM_PLAYERS; i++){
+            if (players[i].getPoints() == POINTS_MOON){
+                System.out.println("\n" + players[i].getName() + " shot the moon and wins!!");
+                moonShot = true;
+                break;
             }
-            if (player3.getPoints() < winner.getPoints()){
-                winner = player3;
-            }
-            if (player4.getPoints() < winner.getPoints()){
-                winner = player4;
+        }
+
+        if (!moonShot){
+            Player winner = players[0];
+            for (int j = 1; j < NUM_PLAYERS; j++){
+                if (players[j].getPoints() < winner.getPoints()){
+                    winner = players[j];
+                }
             }
             System.out.println("\n" + winner.getName() + " wins with the lowest score!");
         }

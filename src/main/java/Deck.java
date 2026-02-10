@@ -31,12 +31,7 @@ public class Deck {
     }
 
     public boolean isEmpty(){
-        if (cardsLeft == 0){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return (cardsLeft == 0);
     }
 
     public int getCardsLeft() {

@@ -13,9 +13,8 @@ public class Player {
     }
 
     // Added num to the constructor, so I can easily know and access what number player is playing in game
-    public Player(String name, ArrayList<Card> hand, int num){
+    public Player(String name, int num){
         this.name = name;
-        this.hand = hand;
         this.num = num;
         this.points = 0;
     }
@@ -38,6 +37,10 @@ public class Player {
 
     public void addCard(Card card){
         hand.add(card);
+    }
+
+    public void setHand(ArrayList<Card> hand) {
+        this.hand = hand;
     }
 
     // Remove a card from the players hand
