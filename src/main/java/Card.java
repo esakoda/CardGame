@@ -1,10 +1,23 @@
+import java.awt.*;
 import java.util.Objects;
 
 public class Card {
     private String suit;
     private String rank;
     private int value;
+    private Image image;
 
+    // Images are arranged in Spades, Hearts, Diamonds, Clubs --- Ace through King
+
+    // Constructor with all instance variables
+    public Card(String suit, String rank, int value, Image image){
+        this.suit = suit;
+        this.rank = rank;
+        this.value= value;
+        this.image = image;
+    }
+
+    // Constructor with no image - easier to create cards in Game
     public Card(String suit, String rank, int value){
         this.suit = suit;
         this.rank = rank;
@@ -43,6 +56,10 @@ public class Card {
 
     public String toString(){
         return this.rank + " of " + this.suit;
+    }
+
+    public Image getImage(){
+        return this.image;
     }
 
     @Override

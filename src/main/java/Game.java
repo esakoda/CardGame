@@ -16,8 +16,11 @@ public class Game {
     private static final int NUM_PLAYERS = 4;
     private static final int POINTS_MOON = 26;
     private static final Card twoOfClubs = new Card("Clubs", "2", 0);
+    private GameView window;
 
     public Game(){
+        // Set up frontend
+        this.window = new GameView(this);
         // Get the name of each player
         Scanner scanner = new Scanner(System.in);
         String[] names = new String[4];
@@ -26,9 +29,9 @@ public class Game {
             names[i - 1] = scanner.nextLine();
         }
         // Create main deck of cards
-        String[] ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King", "Ace"};
+        String[] ranks = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
         this.ranks = ranks;
-        String[] suits = {"Diamonds", "Clubs", "Spades", "Hearts"};
+        String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
         int[] values = {0, 1, 13};
         deck = new Deck(ranks, suits, values);
 

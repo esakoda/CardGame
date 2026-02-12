@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class Deck {
@@ -6,26 +7,25 @@ public class Deck {
 
     public Deck(String[] ranks, String[] suits, int[] values){
         cards = new ArrayList<Card>();
-        Card card;
         int points;
-        for (int i = 0; i < suits.length; i++) {
-            for (int j = 0; j < ranks.length; j++) {
+        int num = 0;
+        for (int i = 0; i < ranks.length; i++){
+            for (int j = 0; j < suits.length; j++){
                 // All hearts are worth 1 point
-                if (suits[i].equals("Hearts")){
+                if (suits[j].equals("Hearts")){
                     points = 1;
                 }
-                // Queen of Spades card is worth 13 points
-                else if (suits[i].equals("Spades") && ranks[j].equals("Queen")){
+                // Queen of Spades is worth 13 points
+                else if (suits[j].equals("Spades") && ranks[i].equals("Queen")){
                     points = 13;
                 }
                 else {
                     points = 0;
                 }
-                card = new Card(suits[i], ranks[j], points);
-                cards.add(card);
+                num++;
+                cards.add(new Card(suits[j], ranks[i], points, new ImageIcon("src/main/resources/" + num +".png").getImage()));
             }
         }
-
         cardsLeft = cards.size();
         shuffle();
     }
