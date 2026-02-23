@@ -16,7 +16,6 @@ public class GameView extends JFrame {
     }
 
     public void paint(Graphics g){
-        g.drawImage(new ImageIcon("src/main/resources/1.png").getImage(), 50, 50, 75, 100, this);
         if (backend.getState() == Game.STATE_TITLE){
             drawTitle(g);
         }
@@ -32,18 +31,34 @@ public class GameView extends JFrame {
     }
 
     public void drawTitle(Graphics g){
-
+        g.setColor(Color.RED);
+        g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
+        g.setColor(Color.WHITE);
+        Font titleFont = new Font("Serif", Font.BOLD, 150);
+        g.setFont(titleFont);
+        g.drawString("Hearts", 200, 300);
     }
 
     public void drawInstructions(Graphics g){
-
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
+        g.setColor(Color.RED);
+        // Split the instructions into lines so they fit into the window
+        String instructions = backend.getInstructions();
+        String[] lines = instructions.split("\n");
+        for (int i = 0; i < lines.length; i++){
+            g.drawString(lines[i], 50, (50 + 50 * i));
+        }
     }
 
     public void drawGame(Graphics g){
-
+        g.setColor(Color.GREEN);
+        g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
+        g.drawImage(new ImageIcon("src/main/resources/1.png").getImage(), 50, 50, 75, 100, this);
     }
 
     public void drawEnd(Graphics g){
-
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
     }
 }

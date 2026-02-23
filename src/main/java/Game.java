@@ -16,6 +16,19 @@ public class Game {
     private static final int NUM_PLAYERS = 4;
     private static final int POINTS_MOON = 26;
     private static final Card twoOfClubs = new Card("Clubs", "2", 0);
+    private static final String INSTRUCTIONS = "Welcome to the game of Hearts! The game is played over 13 tricks. The first trick must start " +
+            "with the 2 of clubs, \nand the other players must play a club if they have one; if they don’t, they may " +
+            "play any card. \nThe player who plays the highest card of the suit that was led wins the trick.\n" +
+            "\n" +
+            "For every new trick, the player who won the previous one leads. They may play any suit except hearts, \n" +
+            "unless hearts have been “broken” (which happens when a player has no cards of the led suit and \nchooses " +
+            "to play a heart). All following players must play the same suit if possible; if not, they may play any " +
+            "card.\n" +
+            "\n" +
+            "Your goal is to finish with the fewest points. Each heart is worth 1 point, and the Queen of Spades is " +
+            "worth 13 points.\nHowever, if you choose to attempt “shooting the moon,” you must take all 13 hearts " +
+            "plus the Queen of Spades. \nIf you succeed, you win; if not, the player with the lowest score after all " +
+            "13 tricks wins the game.";
     private GameView window;
     // State tracker variables
     public static final int STATE_TITLE = 0;
@@ -72,19 +85,10 @@ public class Game {
     }
 
     public void printInstructions(){
-        System.out.println("Welcome to the game of Hearts! The game is played over 13 tricks. The first trick must start " +
-                "with the 2 of clubs, and the other players must play a club if they have one; if they don’t, they may " +
-                "play any card. The player who plays the highest card of the suit that was led wins the trick.\n" +
-                "\n" +
-                "For every new trick, the player who won the previous one leads. They may play any suit except hearts, " +
-                "unless hearts have been “broken” (which happens when a player has no cards of the led suit and chooses " +
-                "to play a heart). All following players must play the same suit if possible; if not, they may play any " +
-                "card.\n" +
-                "\n" +
-                "Your goal is to finish with the fewest points. Each heart is worth 1 point, and the Queen of Spades is " +
-                "worth 13 points. However, if you choose to attempt “shooting the moon,” you must take all 13 hearts " +
-                "plus the Queen of Spades. If you succeed, you win; if not, the player with the lowest score after all " +
-                "13 tricks wins the game.");
+        // Display instructions on frontend
+        state = STATE_INSTR;
+        window.repaint();
+        System.out.println(INSTRUCTIONS);
     }
 
     // Print out a hand
@@ -129,6 +133,10 @@ public class Game {
     // Getters for GameView
     public int getState(){
         return state;
+    }
+
+    public String getInstructions(){
+        return INSTRUCTIONS;
     }
 
     // Play one trick (all 4 players place down cards)
@@ -279,9 +287,11 @@ public class Game {
     }
 
     public void playGame(){
-        // Show instructions screen
-        state = STATE_INSTR;
-        window.repaint();
+        // Allow the user to read the instructions before switching the screen to the game
+        String ans;
+        Scanner input = new Scanner(System.in);
+        System.out.println("Press return to start the game!");
+        ans = input.nextLine();
         // Show game screen
         state = STATE_GAME;
         window.repaint();
