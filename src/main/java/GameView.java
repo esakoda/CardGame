@@ -17,5 +17,33 @@ public class GameView extends JFrame {
 
     public void paint(Graphics g){
         g.drawImage(new ImageIcon("src/main/resources/1.png").getImage(), 50, 50, 75, 100, this);
+        if (backend.getState() == Game.STATE_TITLE){
+            drawTitle(g);
+        }
+        else if (backend.getState() == Game.STATE_INSTR){
+            drawInstructions(g);
+        }
+        else if (backend.getState() == Game.STATE_GAME){
+            drawGame(g);
+        }
+        else if (backend.getState() == Game.STATE_END){
+            drawEnd(g);
+        }
+    }
+
+    public void drawTitle(Graphics g){
+
+    }
+
+    public void drawInstructions(Graphics g){
+
+    }
+
+    public void drawGame(Graphics g){
+
+    }
+
+    public void drawEnd(Graphics g){
+
     }
 }

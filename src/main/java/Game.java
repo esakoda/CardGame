@@ -17,10 +17,19 @@ public class Game {
     private static final int POINTS_MOON = 26;
     private static final Card twoOfClubs = new Card("Clubs", "2", 0);
     private GameView window;
+    // State tracker variables
+    public static final int STATE_TITLE = 0;
+    public static final int STATE_INSTR = 1;
+    public static final int STATE_GAME = 2;
+    public static final int STATE_END = 3;
+    private int state;
 
     public Game(){
         // Set up frontend
         this.window = new GameView(this);
+        // Show the title screen
+        state = STATE_TITLE;
+        window.repaint();
         // Get the name of each player
         Scanner scanner = new Scanner(System.in);
         String[] names = new String[4];
@@ -115,6 +124,11 @@ public class Game {
             }
         }
         return -1;
+    }
+
+    // Getters for GameView
+    public int getState(){
+        return state;
     }
 
     // Play one trick (all 4 players place down cards)
@@ -265,6 +279,12 @@ public class Game {
     }
 
     public void playGame(){
+        // Show instructions screen
+        state = STATE_INSTR;
+        window.repaint();
+        // Show game screen
+        state = STATE_GAME;
+        window.repaint();
         // The player with the 2 of clubs starts the game
         Player starter = playerWithTwoOfClubs();
         System.out.println("\n" + starter.getName() + " starts with the 2 of clubs.");
@@ -404,6 +424,10 @@ public class Game {
             }
             System.out.println("\n" + winner.getName() + " wins with the lowest score!");
         }
+
+        // Show end screen
+        state = STATE_END;
+        window.repaint();
     }
 
     public static void main(String[] args) {
