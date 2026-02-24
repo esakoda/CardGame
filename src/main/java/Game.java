@@ -139,6 +139,18 @@ public class Game {
         return INSTRUCTIONS;
     }
 
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public Player getCurrent(){
+        return current;
+    }
+
+    public ArrayList<Card> getTrick(){
+        return trick;
+    }
+
     // Play one trick (all 4 players place down cards)
     public void playRound(){
         // The player who won the last trick leads the next trick
@@ -241,6 +253,7 @@ public class Game {
                     current.getHand().remove(index);
                     trick.add(cardFromHand);
                     System.out.println(current.getName() + " plays " + cardFromHand);
+                    window.repaint();
 
                     // Check if this player wins the trick
                     if ( i == 0){
@@ -267,6 +280,7 @@ public class Game {
 
         // After all 4 players have played, taker takes the trick
         System.out.println("\n" + taker.getName() + " takes the trick!");
+        window.repaint();
 
         // Add up points from this trick
         int trickPoints = 0;
@@ -373,6 +387,7 @@ public class Game {
                     current.getHand().remove(index);
                     trick.add(cardFromHand);
                     System.out.println(current.getName() + " plays " + cardFromHand);
+                    window.repaint();
 
                     // Check if it's the same suit and higher rank, if so this player becomes the taker
                     if (cardFromHand.getSuit().equals("Clubs")) {

@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class GameView extends JFrame {
     private Game backend;
@@ -34,9 +35,9 @@ public class GameView extends JFrame {
         g.setColor(Color.RED);
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
         g.setColor(Color.WHITE);
-        Font titleFont = new Font("Serif", Font.BOLD, 150);
+        Font titleFont = new Font("Serif", Font.ITALIC, 150);
         g.setFont(titleFont);
-        g.drawString("Hearts", 200, 300);
+        g.drawString("Hearts", 200, 350);
     }
 
     public void drawInstructions(Graphics g){
@@ -52,9 +53,43 @@ public class GameView extends JFrame {
     }
 
     public void drawGame(Graphics g){
-        g.setColor(Color.GREEN);
+        // Green background
+        g.setColor(new Color(34,139,34));
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
-        g.drawImage(new ImageIcon("src/main/resources/1.png").getImage(), 50, 50, 75, 100, this);
+
+        Image backImage = new ImageIcon("src/main/resources/back.png").getImage();
+        Player[] players = backend.getPlayers();
+
+        // Figure out who is the current player and assign the rest of the players positions
+        int currentIndex = backend.getCurrent().getNum();
+        int leftIndex = (currentIndex + 1) % 4;
+        int topIndex = (currentIndex + 2) % 4;
+        int rightIndex = (currentIndex + 3) % 4;
+
+        // Draw current player's hand face up at the bottom of the screen
+        ArrayList<Card> currentHand = players[currentIndex].getHand();
+        for (int i = 0; i < currentHand.size(); i++){
+            g.drawImage(currentHand.get(i).getImage(), 50 + i * 55, 460, 55, 80, this);
+        }
+
+        // Draw the next players cards face down
+        for (int i = 0; i < players[leftIndex].getHand().size(); i++){
+            g.drawImage(backImage, 20, 50 + i * 25, 55, 80, this);
+        }
+
+        for (int i = 0; i < players[topIndex].getHand().size(); i++){
+            g.drawImage(backImage,125 + i * 40,30,55,80,this);
+        }
+
+        for (int i = 0; i < players[rightIndex].getHand().size(); i++){
+            g.drawImage(backImage, 720, 50 + i * 25, 55, 80, this);
+        }
+
+        // Draw the trick in the center
+        ArrayList<Card> trick = backend.getTrick();
+        for (int i = 0; i < trick.size(); i++){
+            g.drawImage(trick.get(i).getImage(), 290 + i * 65, 240, 55, 80, this);
+        }
     }
 
     public void drawEnd(Graphics g){
