@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -15,7 +16,7 @@ public class Game {
     private Card takerCard;
     private static final int NUM_PLAYERS = 4;
     private static final int POINTS_MOON = 26;
-    private static final Card twoOfClubs = new Card("Clubs", "2", 0);
+    private static final Card twoOfClubs = new Card("Clubs", "2", 0, new ImageIcon("src/main/resources/8.png").getImage());
     private static final String INSTRUCTIONS = "Welcome to the game of Hearts! The game is played over 13 tricks. The first trick must start " +
             "with the 2 of clubs, \nand the other players must play a club if they have one; if they don’t, they may " +
             "play any card. \nThe player who plays the highest card of the suit that was led wins the trick.\n" +
@@ -122,6 +123,10 @@ public class Game {
 
     // Get the value of each rank, so I can compare them (2 is the lowest, ace is the highest)
     public int getRankValue(String rank){
+        // Change the value of Ace because it's currently 1 due to the order of the cards in resources
+        if (rank.equals("Ace")){
+            return 13;
+        }
         for (int i = 0; i < ranks.length; i++){
             if (ranks[i].equals(rank)){
                 return i;
@@ -156,6 +161,7 @@ public class Game {
         // The player who won the last trick leads the next trick
         Player leader = taker;
         current = leader;
+        window.repaint();
 
         // Play 4 cards
         for (int i = 0; i < 4; i++){
@@ -306,9 +312,6 @@ public class Game {
         Scanner input = new Scanner(System.in);
         System.out.println("Press return to start the game!");
         ans = input.nextLine();
-        // Show game screen
-        state = STATE_GAME;
-        window.repaint();
         // The player with the 2 of clubs starts the game
         Player starter = playerWithTwoOfClubs();
         System.out.println("\n" + starter.getName() + " starts with the 2 of clubs.");
@@ -317,6 +320,10 @@ public class Game {
         taker = starter;
         takerCard = twoOfClubs;
         ledSuit = "Clubs";
+        current = starter;
+        // Show game screen
+        state = STATE_GAME;
+        window.repaint();
         current = nextPlayer(starter);
 
         // Other 3 players play their first card

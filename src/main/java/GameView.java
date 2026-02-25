@@ -85,11 +85,25 @@ public class GameView extends JFrame {
             g.drawImage(backImage, 720, 50 + i * 25, 55, 80, this);
         }
 
+        g.setColor(Color.WHITE);
+        g.drawString("Trick size: " + backend.getTrick().size(), 300,200);
         // Draw the trick in the center
         ArrayList<Card> trick = backend.getTrick();
         for (int i = 0; i < trick.size(); i++){
             g.drawImage(trick.get(i).getImage(), 290 + i * 65, 240, 55, 80, this);
         }
+
+        // Draw player names and scores
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Arial", Font.BOLD, 16));
+        g.drawString(players[currentIndex].getName() + ": " + players[currentIndex].getPoints() + " pts", 350, 555);
+        g.drawString(players[topIndex].getName() + ": " + players[topIndex].getPoints() + " pts", 350, 125);
+        g.drawString(players[leftIndex].getName() + ": " + players[leftIndex].getPoints() + " pts", 20, 450);
+        g.drawString(players[rightIndex].getName() + ": " + players[rightIndex].getPoints() + " pts", 680, 450);
+
+        // Draw whose turn it is
+        g.setFont(new Font("Arial", Font.ITALIC, 18));
+        g.drawString(players[currentIndex].getName() + "'s turn", 330, 225);
     }
 
     public void drawEnd(Graphics g){
