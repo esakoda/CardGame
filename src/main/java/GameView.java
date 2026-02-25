@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 public class GameView extends JFrame {
     private Game backend;
+    private Player[] players;
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
+    private static final int CARD_WIDTH = 55;
+    private static final int CARD_HEIGHT = 80;
 
     public GameView(Game backend){
         this.backend = backend;
@@ -32,9 +35,9 @@ public class GameView extends JFrame {
     }
 
     public void drawTitle(Graphics g){
-        g.setColor(Color.RED);
+        g.setColor(new Color(122, 0, 16));
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
-        g.setColor(Color.WHITE);
+        g.setColor(new Color(255, 219, 234));
         Font titleFont = new Font("Serif", Font.ITALIC, 150);
         g.setFont(titleFont);
         g.drawString("Hearts", 200, 350);
@@ -58,7 +61,7 @@ public class GameView extends JFrame {
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
 
         Image backImage = new ImageIcon("src/main/resources/back.png").getImage();
-        Player[] players = backend.getPlayers();
+        players = backend.getPlayers();
 
         // Figure out who is the current player and assign the rest of the players positions
         int currentIndex = backend.getCurrent().getNum();
@@ -69,28 +72,26 @@ public class GameView extends JFrame {
         // Draw current player's hand face up at the bottom of the screen
         ArrayList<Card> currentHand = players[currentIndex].getHand();
         for (int i = 0; i < currentHand.size(); i++){
-            g.drawImage(currentHand.get(i).getImage(), 50 + i * 55, 460, 55, 80, this);
+            g.drawImage(currentHand.get(i).getImage(), 50 + i * CARD_WIDTH, 460, CARD_WIDTH, CARD_HEIGHT, this);
         }
 
         // Draw the next players cards face down
         for (int i = 0; i < players[leftIndex].getHand().size(); i++){
-            g.drawImage(backImage, 20, 50 + i * 25, 55, 80, this);
+            g.drawImage(backImage, 20, 50 + i * 25, CARD_WIDTH, CARD_HEIGHT, this);
         }
 
         for (int i = 0; i < players[topIndex].getHand().size(); i++){
-            g.drawImage(backImage,125 + i * 40,30,55,80,this);
+            g.drawImage(backImage,125 + i * 40,30,CARD_WIDTH,CARD_HEIGHT,this);
         }
 
         for (int i = 0; i < players[rightIndex].getHand().size(); i++){
-            g.drawImage(backImage, 720, 50 + i * 25, 55, 80, this);
+            g.drawImage(backImage, 720, 50 + i * 25, CARD_WIDTH, CARD_HEIGHT, this);
         }
 
-        g.setColor(Color.WHITE);
-        g.drawString("Trick size: " + backend.getTrick().size(), 300,200);
         // Draw the trick in the center
         ArrayList<Card> trick = backend.getTrick();
         for (int i = 0; i < trick.size(); i++){
-            g.drawImage(trick.get(i).getImage(), 290 + i * 65, 240, 55, 80, this);
+            g.drawImage(trick.get(i).getImage(), 290 + i * 65, 240, CARD_WIDTH, CARD_HEIGHT, this);
         }
 
         // Draw player names and scores
@@ -109,5 +110,24 @@ public class GameView extends JFrame {
     public void drawEnd(Graphics g){
         g.setColor(Color.WHITE);
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        players = backend.getPlayers();
+
+        // Display winner
+        g.setColor(Color.RED);
+        g.setFont(new Font("Serif",Font.BOLD,40));
+        if (backend.getTie()){
+            g.drawString("There is a tie!", 100, 175);
+        }
+        else {
+            g.drawString(backend.getWinner().getName() + " wins with the lowest number of points!", 50,175);
+        }
+
+        // Display point totals
+        g.setFont(new Font("Serif", Font.ITALIC, 20));
+        g.drawString("Point totals:", 100, 250);
+        for (int i = 0; i < players.length; i++){
+            g.drawString(players[i].getName() + ": " + players[i].getPoints(), 100, 300 + 50 * i);
+        }
     }
 }

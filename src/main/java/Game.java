@@ -8,9 +8,11 @@ public class Game {
     private ArrayList<Card> trick;
     private Player taker;
     private Player current;
+    private Player winner;
     private Card choice;
     private Card cardFromHand;
     private boolean heartsBroken;
+    private boolean tie;
     private String ledSuit;
     private String[] ranks;
     private Card takerCard;
@@ -154,6 +156,14 @@ public class Game {
 
     public ArrayList<Card> getTrick(){
         return trick;
+    }
+
+    public Player getWinner(){
+        return winner;
+    }
+
+    public boolean getTie(){
+        return tie;
     }
 
     // Play one trick (all 4 players place down cards)
@@ -439,22 +449,39 @@ public class Game {
 
         // Check if someone shot the moon
         boolean moonShot = false;
+        winner = players[0];
         for (int i = 0; i < NUM_PLAYERS; i++){
             if (players[i].getPoints() == POINTS_MOON){
-                System.out.println("\n" + players[i].getName() + " shot the moon and wins!!");
+                winner = players[i];
+                System.out.println("\n" + winner.getName() + " shot the moon and wins!!");
                 moonShot = true;
                 break;
             }
         }
 
         if (!moonShot){
-            Player winner = players[0];
-            for (int j = 1; j < NUM_PLAYERS; j++){
-                if (players[j].getPoints() < winner.getPoints()){
-                    winner = players[j];
+            // Check if there is a tie
+            tie = false;
+            for (int m = 0; m < NUM_PLAYERS; m++){
+                for (int n = 0; n < NUM_PLAYERS; n++){
+                    if (players[m].getPoints() == players[n].getPoints()){
+                        tie = true;
+                        break;
+                    }
                 }
             }
-            System.out.println("\n" + winner.getName() + " wins with the lowest score!");
+            if (tie){
+                System.out.println("\nThere is a tie!");
+            }
+           else {
+                // If no tie, check for winner
+                for (int j = 1; j < NUM_PLAYERS; j++){
+                    if (players[j].getPoints() < winner.getPoints()){
+                        winner = players[j];
+                    }
+                }
+                System.out.println("\n" + winner.getName() + " wins with the lowest score!");
+            }
         }
 
         // Show end screen
