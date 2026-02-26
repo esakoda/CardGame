@@ -11,14 +11,17 @@ public class GameView extends JFrame {
     private static final int CARD_HEIGHT = 80;
 
     public GameView(Game backend){
+        // Access to backend
         this.backend = backend;
 
+        // Set up window
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Hearts");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         this.setVisible(true);
     }
 
+    // Paint different windows based on the state of the game
     public void paint(Graphics g){
         if (backend.getState() == Game.STATE_TITLE){
             drawTitle(g);
@@ -35,6 +38,7 @@ public class GameView extends JFrame {
     }
 
     public void drawTitle(Graphics g){
+        // Red background with pink Hearts title
         g.setColor(new Color(122, 0, 16));
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
         g.setColor(new Color(255, 219, 234));
@@ -44,9 +48,10 @@ public class GameView extends JFrame {
     }
 
     public void drawInstructions(Graphics g){
-        g.setColor(Color.WHITE);
+        // Pink background with red instructions
+        g.setColor(new Color(255, 219, 234));
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
-        g.setColor(Color.RED);
+        g.setColor(new Color(122, 0, 16));
         // Split the instructions into lines so they fit into the window
         String instructions = backend.getInstructions();
         String[] lines = instructions.split("\n");
@@ -60,6 +65,7 @@ public class GameView extends JFrame {
         g.setColor(new Color(34,139,34));
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
 
+        // Set up back image for card and players from backend
         Image backImage = new ImageIcon("src/main/resources/back.png").getImage();
         players = backend.getPlayers();
 
@@ -108,13 +114,15 @@ public class GameView extends JFrame {
     }
 
     public void drawEnd(Graphics g){
-        g.setColor(Color.WHITE);
+        // Pink background
+        g.setColor(new Color(255, 219, 234));
         g.fillRect(0,0,WINDOW_WIDTH, WINDOW_HEIGHT);
 
+        // Get players from backend
         players = backend.getPlayers();
 
         // Display winner
-        g.setColor(Color.RED);
+        g.setColor(new Color(122, 0, 16));
         g.setFont(new Font("Serif",Font.BOLD,40));
         if (backend.getTie()){
             g.drawString("There is a tie!", 100, 175);

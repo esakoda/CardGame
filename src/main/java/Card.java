@@ -7,8 +7,6 @@ public class Card {
     private int value;
     private Image image;
 
-    // Images are arranged in Spades, Hearts, Diamonds, Clubs --- Ace through King
-
     // Constructor with all instance variables
     public Card(String suit, String rank, int value, Image image){
         this.suit = suit;

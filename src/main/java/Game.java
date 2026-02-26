@@ -464,7 +464,7 @@ public class Game {
             tie = false;
             for (int m = 0; m < NUM_PLAYERS; m++){
                 for (int n = 0; n < NUM_PLAYERS; n++){
-                    if (players[m].getPoints() == players[n].getPoints()){
+                    if (m != n && players[m].getPoints() == players[n].getPoints()){
                         tie = true;
                         break;
                     }
