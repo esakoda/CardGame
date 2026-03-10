@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Objects;
+
 
 public class Player {
     private String name;
@@ -49,6 +52,12 @@ public class Player {
             if (this.hand.get(i).equals(card)){
                 this.hand.remove(i);
             }
+        }
+    }
+
+    public void sortHand() {
+        if (!this.hand.isEmpty()) {
+            Collections.sort(this.hand, new CardSorter());
         }
     }
 
