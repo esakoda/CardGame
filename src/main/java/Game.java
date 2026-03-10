@@ -18,7 +18,7 @@ public class Game {
     private Card takerCard;
     private static final int NUM_PLAYERS = 4;
     private static final int POINTS_MOON = 26;
-    private static final Card twoOfClubs = new Card("Clubs", "2", 0, new ImageIcon("src/main/resources/8.png").getImage());
+    private static final Card twoOfClubs = new Card("Clubs", "2", 0, 0, new ImageIcon("src/main/resources/8.png").getImage());
     private static final String INSTRUCTIONS = "Welcome to the game of Hearts! The game is played over 13 tricks. The first trick must start " +
             "with the 2 of clubs, \nand the other players must play a club if they have one; if they don’t, they may " +
             "play any card. \nThe player who plays the highest card of the suit that was led wins the trick.\n" +
@@ -54,11 +54,12 @@ public class Game {
             names[i - 1] = scanner.nextLine();
         }
         // Create main deck of cards
+        int[] order = {14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         String[] ranks = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
         this.ranks = ranks;
         String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
         int[] values = {0, 1, 13};
-        deck = new Deck(ranks, suits, values);
+        deck = new Deck(ranks, suits, values, order);
 
         players = new Player[NUM_PLAYERS];
 
@@ -78,6 +79,11 @@ public class Game {
             for (int j = 0; j < NUM_PLAYERS; j++){
                 players[j].getHand().add(deck.deal());
             }
+        }
+
+        // Sort everyone's hand
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            players[i].sortHand();
         }
 
         // Create trick pile
