@@ -5,7 +5,7 @@ public class Deck {
     private ArrayList<Card> cards;
     int cardsLeft;
 
-    public Deck(String[] ranks, String[] suits, int[] values){
+    public Deck(String[] ranks, String[] suits, int[] values, int[] order){
         cards = new ArrayList<Card>();
         int points;
         int num = 0;
@@ -23,7 +23,7 @@ public class Deck {
                     points = 0;
                 }
                 num++;
-                cards.add(new Card(suits[j], ranks[i], points, new ImageIcon("src/main/resources/" + num +".png").getImage()));
+                cards.add(new Card(suits[j], ranks[i], points, order[i], new ImageIcon("src/main/resources/" + num +".png").getImage()));
             }
         }
         cardsLeft = cards.size();
