@@ -5,27 +5,34 @@ public class Card {
     private String suit;
     private String rank;
     private int value;
+    private int order;
     private Image image;
 
     // Constructor with all instance variables
-    public Card(String suit, String rank, int value, Image image){
+    public Card(String suit, String rank, int value, int order, Image image){
         this.suit = suit;
         this.rank = rank;
         this.value= value;
+        this.order = order;
         this.image = image;
     }
 
     // Constructor with no image - easier to create cards in Game
-    public Card(String suit, String rank, int value){
+    public Card(String suit, String rank, int value, int order){
         this.suit = suit;
         this.rank = rank;
         this.value= value;
+        this.order = order;
     }
 
     // Added constructor without value because the user won't input the value of their card
     public Card(String suit, String rank){
         this.suit = suit;
         this.rank = rank;
+    }
+
+    public int getOrder() {
+        return this.order;
     }
 
     public String getSuit() {
