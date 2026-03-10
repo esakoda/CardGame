@@ -18,6 +18,7 @@ public class Game {
     private Card takerCard;
     private static final int NUM_PLAYERS = 4;
     private static final int POINTS_MOON = 26;
+    // Rank 2 corresponds to order 0, as 2 is the smallest valued card in Hearts
     private static final Card twoOfClubs = new Card("Clubs", "2", 0, 0, new ImageIcon("src/main/resources/8.png").getImage());
     private static final String INSTRUCTIONS = "Welcome to the game of Hearts! The game is played over 13 tricks. The first trick must start " +
             "with the 2 of clubs, \nand the other players must play a club if they have one; if they don’t, they may " +
@@ -54,6 +55,7 @@ public class Game {
             names[i - 1] = scanner.nextLine();
         }
         // Create main deck of cards
+        // The numerical order of each card based on their rank, used to sort the cards.
         int[] order = {14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
         String[] ranks = {"Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"};
         this.ranks = ranks;
