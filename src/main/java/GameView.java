@@ -5,6 +5,9 @@ import java.util.ArrayList;
 public class GameView extends JFrame {
     private Game backend;
     private Player[] players;
+    private JButton restartButton;
+    private JPanel gamePanel; // --- NEW: The panel we will draw on ---
+
     public static final int WINDOW_WIDTH = 800;
     public static final int WINDOW_HEIGHT = 600;
     private static final int CARD_WIDTH = 55;
@@ -18,24 +21,51 @@ public class GameView extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.setTitle("Hearts");
         this.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        // --- NEW: Create a JPanel to safely handle our custom drawing ---
+        gamePanel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g); // Clears the background safely to prevent overlapping graphics
+
+                if (backend.getState() == Game.STATE_TITLE){
+                    drawTitle(g);
+                }
+                else if (backend.getState() == Game.STATE_INSTR){
+                    drawInstructions(g);
+                }
+                else if (backend.getState() == Game.STATE_GAME){
+                    drawGame(g);
+                }
+                else if (backend.getState() == Game.STATE_END){
+                    drawEnd(g);
+                }
+            }
+        };
+        gamePanel.setLayout(null); // Allow manual button positioning
+
+        // Set up the button
+        restartButton = new JButton("Restart Game");
+        restartButton.setBounds(300, 450, 200, 50);
+        restartButton.setFont(new Font("Arial", Font.BOLD, 18));
+        restartButton.setVisible(false); // Hidden by default
+
+        // When clicked, tell the backend to reset the game
+        restartButton.addActionListener(e -> backend.resetGame());
+
+        // Add the button to our drawing panel, then add the panel to the window
+        gamePanel.add(restartButton);
+        this.add(gamePanel);
+
         this.setVisible(true);
     }
 
-    // Paint different windows based on the state of the game
-    public void paint(Graphics g){
-        if (backend.getState() == Game.STATE_TITLE){
-            drawTitle(g);
-        }
-        else if (backend.getState() == Game.STATE_INSTR){
-            drawInstructions(g);
-        }
-        else if (backend.getState() == Game.STATE_GAME){
-            drawGame(g);
-        }
-        else if (backend.getState() == Game.STATE_END){
-            drawEnd(g);
-        }
+    public void showRestartButton(boolean show) {
+        restartButton.setVisible(show);
     }
+
+    // Notice we REMOVED the public void paint(Graphics g) method from here!
+    // It is now safely handled by the gamePanel above.
 
     public void drawTitle(Graphics g){
         // Red background with pink Hearts title

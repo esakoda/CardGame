@@ -75,4 +75,8 @@ public class Player {
         Player player = (Player) o;
         return points == player.points && Objects.equals(name, player.name) && Objects.equals(hand, player.hand);
     }
+
+    public void resetPoints() {
+        this.points = 0;
+    }
 }
