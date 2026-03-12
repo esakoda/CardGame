@@ -494,7 +494,52 @@ public class Game {
 
         // Show end screen
         state = STATE_END;
+        window.showRestartButton(true); // ADD THIS LINE
         window.repaint();
+    }
+
+
+    public void resetGame() {
+        // 1. Rebuild and shuffle the deck
+        int[] order = {14, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        String[] suits = {"Spades", "Hearts", "Diamonds", "Clubs"};
+        int[] values = {0, 1, 13};
+        deck = new Deck(ranks, suits, values, order);
+
+        // 2. Clear hands and reset points
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            players[i].setHand(new ArrayList<Card>());
+            players[i].resetPoints();
+        }
+
+        // 3. Deal the new cards
+        int cardsPerPlayer = (deck.getCardsLeft() / 4);
+        for (int i = 0; i < cardsPerPlayer; i++) {
+            for (int j = 0; j < NUM_PLAYERS; j++) {
+                players[j].getHand().add(deck.deal());
+            }
+        }
+
+        // 4. Sort the new hands
+        for (int i = 0; i < NUM_PLAYERS; i++) {
+            players[i].sortHand();
+        }
+
+        // 5. Reset round variables
+        trick.clear();
+        heartsBroken = false;
+        tie = false;
+
+        // 6. Hide the button and update the screen
+        window.showRestartButton(false);
+        state = STATE_GAME;
+        window.repaint();
+
+        // 7. Restart the game loop in a new thread
+        // We do this so the Scanner doesn't freeze the Swing User Interface!
+        new Thread(() -> {
+            playGame();
+        }).start();
     }
 
     public static void main(String[] args) {
